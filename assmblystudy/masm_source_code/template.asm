@@ -11,6 +11,10 @@ stack ends
 
 code segment
 		start:
+					mov ax, stack
+					mov ss, ax
+					mov sp, 256
+					
 					
 					mov ax, 4C00H
 					int 21H
