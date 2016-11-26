@@ -27,6 +27,7 @@ code segment
 
 
 add_big_number:
+					push ax
 					push di	
 					push si	
 					push cx
@@ -49,6 +50,7 @@ add_big_number:
 					pop cx
 					pop si
 					pop di
+					pop ax
 
 					ret
 
