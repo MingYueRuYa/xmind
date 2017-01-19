@@ -1,4 +1,4 @@
-;安装0号中断 0:200 - 0:3FF为安全地址 0:7E00H也是安全地址 0:B800为显卡地址
+;安装0号中断 0:200 - 0:3FF为安全地址 0:7E00H也是安全地址
 assume cs:code, ds:data, ss:stack
 
 data segment
@@ -18,16 +18,32 @@ code segment
 					mov ss, ax
 					mov sp, 256
 					
+					call set_screen_color
 					call cpy_new_int0
 					call set_new_int
 					
 					mov ax, 0
 					mov dx, 1
-					mov bx, 1
+					mov bx, 0
 					div bx 
 					
 					mov ax, 4C00H
 					int 21H
+					
+	set_screen_color:
+					
+					mov bx, 0B800H
+					mov es, bx
+					
+					mov bx, 1					;奇数位为颜色为，偶数位为ascii
+					mov dh, 00010111B
+					mov cx, 2000
+					
+		set_color:
+					mov es:[bx], dh 
+					add bx, 2
+					loop set_color
+					ret
 					
 	set_new_int:
 					mov bx, 0
@@ -52,7 +68,7 @@ code segment
 						je showStringRet
 						mov es:[di], dl
 						add di, 2
-						inc si
+						inc si                                                        
 						jmp showString
 	showStringRet:	mov ax, 4C00H
 							int 21H
